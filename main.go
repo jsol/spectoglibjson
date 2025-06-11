@@ -87,6 +87,16 @@ func printGetFunc(name string, properties map[string]Property, required []string
 				args_opt = append(args_opt, "gboolean "+to_c_name(name))
 			}
 			toJson = append(toJson, toJsonStr)
+		} else if prop.Type == "number" {
+			docParam = append(docParam, "* @param "+cname+"  "+prop.Description)
+			toJsonStr := "json_object_set_int_member(obj, \"" + name + "\", " + cname + ");"
+
+			if slices.Contains(required, name) {
+				args = append(args, "gint64 "+to_c_name(name))
+			} else {
+				args_opt = append(args_opt, "gint64 "+to_c_name(name))
+			}
+			toJson = append(toJson, toJsonStr)
 		} else if prop.Type == "string" {
 
 			if prop.Format == "date-time" {
